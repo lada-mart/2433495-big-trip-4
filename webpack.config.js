@@ -1,9 +1,9 @@
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const HTMLPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './scr/main.js',
+  entry: './src/main.js',
   output: {
     filename: 'bundle.[contenthash].js',
     path: path.resolve(__dirname, 'build'),
@@ -14,7 +14,7 @@ module.exports = {
     new HTMLPlugin({
       template: 'public/index.html',
     }),
-    new CopyWebpackPlugin({
+    new CopyPlugin({
       patterns: [{
         from: 'public',
         globOptions: {
