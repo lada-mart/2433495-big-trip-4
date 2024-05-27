@@ -8,8 +8,10 @@ export default class CurrentFormView extends AbstractStatefulView{
   #handleSubmit = null;
   #offerModel = null;
   #pointModel = null;
+
   #datepickerTo = null;
   #datepickerFrom = null;
+
 
   constructor ({data, onSubmit, pointModel, offerModel}) {
     super();
@@ -18,8 +20,10 @@ export default class CurrentFormView extends AbstractStatefulView{
     this.element.querySelector('form').addEventListener('submit', this.#submitHandler);
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeRouteToggleHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationToggleHandler);
+
     this.#setDatepickerFrom();
     this.#setDatepickerTo();
+
     this.#offerModel = offerModel;
     this.#pointModel = pointModel;
   }
@@ -29,6 +33,7 @@ export default class CurrentFormView extends AbstractStatefulView{
   #submitHandler = (evt) => {
     evt.preventDefault();
     this.#handleSubmit(CurrentFormView.parseStateToPoint(this._state));
+
   };
   #typeRouteToggleHandler = (evt) => {
     evt.preventDefault();
@@ -84,14 +89,42 @@ export default class CurrentFormView extends AbstractStatefulView{
   static parsePointToState(point) {
     return {...point};
   }
+
+  };
+
+  #typeRouteToggleHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      type: evt.target.value,
+      offers: this.#pointModel.offerModel.updateOffers(evt.target.value)
+    });
+  };
+
+  #destinationToggleHandler = (evt) => {
+    evt.preventDefault();
+    const tempID = this.#pointModel.townModel.getIDByTownName(evt.target.value);
+    this.updateElement({
+      townID: tempID,
+      description: this.#pointModel.townModel.getTownDescByID(tempID),
+      photos: this.#pointModel.townModel.getPhotosByID(tempID)
+    });
+  };
+
+  static parsePointToState(point) {
+    return {...point};
+  }
+
+
   static parseStateToPoint(state) {
     const point = {...state};
     return point;
   }
+
   _restoreHandlers() {
     this.element.querySelector('form').addEventListener('submit', this.#submitHandler);
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeRouteToggleHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationToggleHandler);
+
     this.#setDatepickerFrom();
     this.#setDatepickerTo();
   }
@@ -105,5 +138,6 @@ export default class CurrentFormView extends AbstractStatefulView{
       this.#datepickerTo = null;
       this.#datepickerFrom = null;
     }
+
   }
 }

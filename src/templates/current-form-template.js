@@ -1,5 +1,6 @@
 import {TYPE_POINTS, DESTINATIONS} from '../const.js';
 import { getFullDate } from '../utils/utils.js';
+
 function createCurrentFormTemplate (pointForm) {
   const offersArr = pointForm.offers !== undefined ? pointForm.offers : [];
   const photosArr = pointForm.photos;
@@ -33,10 +34,17 @@ function createCurrentFormTemplate (pointForm) {
       </div>
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
+
         <input class="event__input  event__input--time event__dateFrom" id="event-start-time-1" type="text" name="event-start-time" value="${getFullDate(pointForm.dateFrom)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
         <input class="event__input  event__input--time event__dateTo" id="event-end-time-1" type="text" name="event-end-time" value="${getFullDate(pointForm.dateTo)}">
+
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFullDate(pointForm.dateFrom)}">
+        &mdash;
+        <label class="visually-hidden" for="event-end-time-1">To</label>
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFullDate(pointForm.dateTo)}">
+
       </div>
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">
@@ -73,4 +81,5 @@ function createCurrentFormTemplate (pointForm) {
 </li>
 `;
 }
+
 export {createCurrentFormTemplate};

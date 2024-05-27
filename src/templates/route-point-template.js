@@ -1,4 +1,8 @@
+
 import {getMonthAndDate, getTime} from '../utils/utils.js';
+
+import {getDateDiff, getMonthAndDate, getTime} from '../utils/utils.js';
+
 
 function createRoutePointTemplate (point) {
   const offersArr = point.offers;

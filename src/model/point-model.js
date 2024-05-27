@@ -1,6 +1,10 @@
 import {getRandomPoint} from '../mock/point.js';
 import { POINTS_COUNT } from '../const.js';
+
 import {getRandomArrayElement, getDateDiff} from '../utils/utils.js';
+
+import {getRandomArrayElement} from '../utils/utils.js';
+
 import TownModel from '../model/town-model.js';
 import OfferModel from '../model/offer-model.js';
 
@@ -9,6 +13,7 @@ export default class PointModel {
   offerModel = null;
   towns = null;
   points = null;
+
   constructor () {
     this.townModel = new TownModel();
     this.towns = this.townModel.getTowns();
@@ -26,10 +31,17 @@ export default class PointModel {
       point.destination = this.townModel.getTownNameById(townID);
       point.description = this.townModel.getTownDescByID(townID);
       point.photos = this.townModel.getPhotosByID(townID);
+
       point.duration = getDateDiff(point.dateFrom, point.dateTo);
       return point;
     });
   }
+
+      return point;
+    });
+  }
+
+
   getPoints() {
     return this.points;
   }
