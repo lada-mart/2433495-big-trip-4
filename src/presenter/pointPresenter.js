@@ -12,6 +12,7 @@ const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING'
 };
+
 export default class PointPresenter {
   #pointsListView = null;
   #handlePointChange = null;
@@ -21,6 +22,7 @@ export default class PointPresenter {
 
   #pointComponent = null;
   #pointFormComponent = null;
+
   #offerModel = new OfferModel('not assigned');
   #pointModel = new PointModel();
 
@@ -29,18 +31,37 @@ export default class PointPresenter {
     this.#handlePointChange = onDataChange;
     this.#handleModeChange = onModeChange;
   }
+
   init(point) {
     this.#point = point;
     const prevPointComponent = this.#pointComponent;
     const prevFormComponent = this.#pointFormComponent;
+
+
+  init(point) {
+    this.#point = point;
+
+    const prevPointComponent = this.#pointComponent;
+    const prevFormComponent = this.#pointFormComponent;
+
+    const escKeyDownBtnHandler = (evt) => {
+      if (evt.key === 'Escape') {
+        this.#replacePointToForm();
+        document.removeEventListener('keydown', escKeyDownBtnHandler);
+      }
+    };
+
+
     this.#pointComponent = new RoutePointView({
       data: this.#point,
       onFavouriteClick: this.#handleFavouriteClick,
     });
+
     this.#pointFormComponent = new CurrentFormView({
       data: this.#point,
       onSubmit: () => {
         this.#replacePointToForm();
+
         document.removeEventListener('keydown', this.#escKeyDownButtonHandler);
       },
       pointModel: this.#pointModel,
@@ -62,10 +83,37 @@ export default class PointPresenter {
     render(openButton, this.#pointComponent.element, RenderPosition.BEFOREEND);
     render(saveButton, deleteButton, RenderPosition.BEFOREBEGIN);
     render(closeButton, deleteButton, RenderPosition.AFTEREND);
+
+        document.removeEventListener('keydown', escKeyDownBtnHandler);
+      }
+    });
+
+    const deleteBtn = this.#pointFormComponent.element.querySelector('.event__reset-btn');
+
+    const openBtn = new OpenFormBtnView({
+      onClick: () => {
+        this.#replaceFormToPoint();
+        document.addEventListener('keydown', escKeyDownBtnHandler);
+      }});
+
+    const closeBtn = new CloseFormBtnView({
+      onClick: () => {
+        this.#replacePointToForm();
+        document.removeEventListener('keydown', escKeyDownBtnHandler);
+      }});
+
+    const saveBtn = new SaveFormBtnView();
+
+    render(openBtn, this.#pointComponent.element, RenderPosition.BEFOREEND);
+    render(saveBtn, deleteBtn, RenderPosition.BEFOREBEGIN);
+    render(closeBtn, deleteBtn, RenderPosition.AFTEREND);
+
+
     if (prevPointComponent === null || prevFormComponent === null) {
       render(this.#pointComponent, this.#pointsListView);
       return;
     }
+
     if (this.#mode === Mode.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);
     }
@@ -75,6 +123,20 @@ export default class PointPresenter {
     remove(prevFormComponent);
     remove(prevPointComponent);
   }
+
+
+    if (this.#mode === Mode.DEFAULT) {
+      replace(this.#pointComponent, prevPointComponent);
+    }
+
+    if (this.#mode === Mode.EDITING) {
+      replace(this.#pointFormComponent, prevFormComponent);
+    }
+
+    remove(prevFormComponent);
+    remove(prevPointComponent);
+  }
+
   destroy() {
     remove(this.#pointComponent);
     remove(this.#pointFormComponent);
@@ -93,6 +155,7 @@ export default class PointPresenter {
     this.#handleModeChange();
     this.#mode = Mode.EDITING;
   }
+
   #handleFavouriteClick = () => {
     this.#handlePointChange({...this.#point, isFavorite: !this.#point.isFavorite});
   };
@@ -101,5 +164,10 @@ export default class PointPresenter {
       this.#replacePointToForm();
       document.removeEventListener('keydown', this.#escKeyDownButtonHandler);
     }
+  };
+
+
+  #handleFavouriteClick = () => {
+    this.#handlePointChange({...this.#point, isFavorite: !this.#point.isFavorite});
   };
 }
