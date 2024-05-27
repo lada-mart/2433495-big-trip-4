@@ -6,7 +6,6 @@ export default class OfferModel {
   constructor(type) {
     this.createOffers(type);
   }
-
   getOffers() {
     return this.offers;
   }
@@ -25,12 +24,19 @@ export default class OfferModel {
   }
 
   updateOffers(newType) {
+
+    this.offers = [];
+
     this.createOffers(newType);
     return this.offers;
   }
 
   createOffers(type) {
+
+    if (OFFERS[type]) {
+
     if (OFFERS[type] !== undefined) {
+
       OFFERS[type].forEach((offerName) => {
         this.offers.push({
           title: offerName,
