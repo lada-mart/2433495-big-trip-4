@@ -1,8 +1,19 @@
+import { createElement } from '../render.js';
 import { createFilterFormTemplate } from '../templates/filter-form-template.js';
-import AbstractView from '../framework/view/abstract-view.js';
 
-export default class FilterFormView extends AbstractView{
-  get template() {
+export default class FilterFormView {
+  getTemplate() {
     return createFilterFormTemplate();
+  }
+
+  getElement() {
+    if (!this.element) {
+      this.element = createElement(this.getTemplate());
+    }
+    return this.element;
+  }
+
+  removeElement() {
+    this.element = null;
   }
 }
