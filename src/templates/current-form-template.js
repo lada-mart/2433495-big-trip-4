@@ -1,10 +1,17 @@
 import {TYPE_POINTS, DESTINATIONS} from '../const.js';
 import { getFullDate } from '../utils/utils.js';
+
 import he from 'he';
 
 function createCurrentFormTemplate (pointForm) {
   const offersArr = pointForm.offers ? pointForm.offers : [];
   const photosArr = pointForm.photos ? pointForm.photos : [];
+
+
+function createCurrentFormTemplate (pointForm) {
+  const offersArr = pointForm.offers !== undefined ? pointForm.offers : [];
+  const photosArr = pointForm.photos;
+
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -30,15 +37,21 @@ function createCurrentFormTemplate (pointForm) {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointForm.destination}" list="destination-list-1">
         <datalist id="destination-list-1">
+
           ${he.encode(DESTINATIONS.map((town) => `<option value="${town}"></option>`).join(''))}
+
+          ${DESTINATIONS.map((town) => `<option value="${town}"></option>`).join('')};
+
         </datalist>
       </div>
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
+
         <input class="event__input  event__input--time event__dateFrom" id="event-start-time-1" type="text" name="event-start-time" value="${getFullDate(pointForm.dateFrom)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
         <input class="event__input  event__input--time event__dateTo" id="event-end-time-1" type="text" name="event-end-time" value="${getFullDate(pointForm.dateTo)}">
+
       </div>
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">
@@ -47,6 +60,21 @@ function createCurrentFormTemplate (pointForm) {
         </label>
         <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="">
       </div>
+
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFullDate(pointForm.dateFrom)}">
+        &mdash;
+        <label class="visually-hidden" for="event-end-time-1">To</label>
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFullDate(pointForm.dateTo)}">
+
+      </div>
+      <div class="event__field-group  event__field-group--price">
+        <label class="event__label" for="event-price-1">
+          <span class="visually-hidden">Price</span>
+          &euro;
+        </label>
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+      </div>
+      <button class="event__reset-btn" type="reset">Delete</button>'
 
     </header>
     <section class="event__details">
@@ -58,7 +86,11 @@ function createCurrentFormTemplate (pointForm) {
         <label class="event__offer-label" for="event-offer-${offer.title.toLowerCase()}-1">
           <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
+
           <span class="event__offer-price ">${offer.price}</span>
+
+          <span class="event__offer-price">${offer.price}</span>
+
         </label>
       </div>`).join('')};
       <section class="event__section  event__section--destination">
@@ -75,4 +107,5 @@ function createCurrentFormTemplate (pointForm) {
 </li>
 `;
 }
+
 export {createCurrentFormTemplate};

@@ -1,5 +1,6 @@
 import { OFFERS } from '../const.js';
 import { getRandomArrayElement, getRandomValue } from '../utils/utils.js';
+
 export default class OfferModel {
   offers = [];
   constructor(type) {
@@ -23,13 +24,19 @@ export default class OfferModel {
   }
 
   updateOffers(newType) {
+
     this.offers = [];
+
     this.createOffers(newType);
     return this.offers;
   }
 
   createOffers(type) {
+
     if (OFFERS[type]) {
+
+    if (OFFERS[type] !== undefined) {
+
       OFFERS[type].forEach((offerName) => {
         this.offers.push({
           title: offerName,
