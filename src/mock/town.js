@@ -1,4 +1,5 @@
 
+
 // import {getRandomArrayElement, getRandomValue} from '../utils/utils.js';
 // import {DESTINATIONS, DESCRIPTION, IMAGE_COUNT} from '../const.js';
 
