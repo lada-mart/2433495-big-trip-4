@@ -6,7 +6,10 @@ import CloseFormBtnView from '../view/close-form-button-view.js';
 import SaveFormBtnView from '../view/save-form-btn-view.js';
 import {isEscapeButton} from '../utils/utils.js';
 import OfferModel from '../model/offer-model.js';
+
+
 import PointModel from '../model/point-model.js';
+
 
 import { UserAction, UpdateType } from '../const.js';
 import DeleteBtnView from '../view/delete-btn-view.js';
@@ -25,10 +28,14 @@ export default class PointPresenter {
   #mode = Mode.DEFAULT;
 
   #deleteButton = null;
-
   #pointComponent = null;
   #pointFormComponent = null;
   #offerModel = new OfferModel('not assigned');
+
+  #pointModel = null;
+
+  constructor ({pointListContainer, onDataChange, onModeChange, pointModel}) {
+
   #pointModel = new PointModel();
 
 
@@ -39,15 +46,19 @@ export default class PointPresenter {
   #pointModel = new PointModel();
 
   constructor ({pointListContainer, onDataChange, onModeChange}) {
+
     this.#pointsListView = pointListContainer;
     this.#handlePointChange = onDataChange;
     this.#handleModeChange = onModeChange;
+    this.#pointModel = pointModel;
   }
+
 
   init(point) {
     this.#point = point;
     const prevPointComponent = this.#pointComponent;
     const prevFormComponent = this.#pointFormComponent;
+
 
   init(point) {
     this.#point = point;
@@ -66,7 +77,6 @@ export default class PointPresenter {
       data: this.#point,
       onFavouriteClick: this.#handleFavouriteClick,
     });
-
     this.#pointFormComponent = new CurrentFormView({
       data: this.#point,
 
@@ -76,7 +86,6 @@ export default class PointPresenter {
       resetButtons: this.resetButtons
     });
     this.#deleteButton = new DeleteBtnView ();
-
     if (prevPointComponent === null || prevFormComponent === null) {
       render(this.#pointComponent, this.#pointsListView);
       this.#deleteButton.element.addEventListener('click', () => this.#handleDeleteClick(CurrentFormView.parseStateToPoint(this.#pointFormComponent._state)));
@@ -137,7 +146,6 @@ export default class PointPresenter {
 
       return;
     }
-
     if (this.#mode === Mode.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);
     }
@@ -170,7 +178,6 @@ export default class PointPresenter {
     }
   }
 
-
   resetButtons = () => {
     const openButton = new OpenFormBtnView({
       onClick: () => {
@@ -188,13 +195,11 @@ export default class PointPresenter {
       render(saveButton, this.#pointFormComponent.element.querySelector('.event__field-group--price'), RenderPosition.AFTEREND);
       render(closeButton, saveButton.element, RenderPosition.AFTEREND);
       render(this.#deleteButton, saveButton.element, RenderPosition.AFTEREND);
-
     }
     else {
       render(openButton, this.#pointComponent.element, RenderPosition.BEFOREEND);
     }
   };
-
   #replacePointToForm() {
     replace(this.#pointComponent, this.#pointFormComponent);
     this.#mode = Mode.DEFAULT;
@@ -204,7 +209,6 @@ export default class PointPresenter {
     this.#handleModeChange();
     this.#mode = Mode.EDITING;
   }
-
   #handleFavouriteClick = () => {
 
     this.#handlePointChange(
@@ -212,7 +216,6 @@ export default class PointPresenter {
       UpdateType.MINOR,
       {...this.#point, isFavorite: !this.#point.isFavorite});
   };
-
   #handleFormSubmit = (update) => {
     this.#handlePointChange(
       UserAction.UPDATE_POINT,
@@ -221,7 +224,6 @@ export default class PointPresenter {
     );
     this.#replaceFormToPoint();
   };
-
   #handleDeleteClick = (point) => {
     this.#handlePointChange(
       UserAction.DELETE_POINT,
@@ -229,6 +231,7 @@ export default class PointPresenter {
       point
     );
   };
+
 
     this.#handlePointChange({...this.#point, isFavorite: !this.#point.isFavorite});
   };

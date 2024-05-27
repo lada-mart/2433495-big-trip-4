@@ -1,5 +1,22 @@
 import dayjs from 'dayjs';
 
+
+// let date = dayjs().subtract(getRandomValue(0, 31), 'day').toDate();
+
+// function getDate({next}) {
+//   const minsGap = getRandomValue(0, 60);
+//   const hoursGap = getRandomValue(0, 11);
+
+//   if (next) {
+//     date = dayjs(date)
+//       .add(minsGap, 'minute')
+//       .add(hoursGap, 'hour')
+//       .toDate();
+//   }
+
+//   return date;
+// }
+
 let date = dayjs().subtract(getRandomValue(0, 31), 'day').toDate();
 function getDate({next}) {
   const minsGap = getRandomValue(0, 60);
@@ -22,6 +39,7 @@ function getDate({next}) {
 
   return date;
 }
+
 function getDateDiff(dateFrom, dateTo) {
   const diff = dayjs(dateTo).diff(dayjs(dateFrom), 'm');
   if (Math.ceil(diff / 1440) > 1){
@@ -54,6 +72,16 @@ function getMonthAndDate(dt) {
 function getFullDate(dt) {
   return dayjs(dt).format('DD/MM/YY hh:mm');
 }
+
+
+// function getRandomArrayElement(items) {
+//   return items[Math.floor(Math.random() * items.length)];
+// }
+
+// function getRandomValue(minimum = 0, maximum = 3000) {
+//   return Math.floor(Math.random() * (maximum - minimum) + minimum);
+// }
+
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
@@ -80,12 +108,16 @@ function getRandomValue(minimum = 0, maximum = 3000) {
   return Math.floor(Math.random() * (maximum - minimum) + minimum);
 }
 
+
 function isEscapeButton (evt) {
   return evt.key === 'Escape';
 }
 
 
+export {getDateDiff, getTime, getMonthAndDate, getFullDate, isEscapeButton};
+
 export {getRandomArrayElement, getRandomValue, getDate, getDateDiff, getTime, getMonthAndDate, getFullDate, isEscapeButton};
 
 export {getRandomArrayElement, getRandomValue, getDate, getDateDiff, getTime, getMonthAndDate, getFullDate, updateItem, isEscapeButton};
+
 

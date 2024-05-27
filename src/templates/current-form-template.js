@@ -2,7 +2,6 @@ import {TYPE_POINTS, DESTINATIONS} from '../const.js';
 import { getFullDate } from '../utils/utils.js';
 
 import he from 'he';
-
 function createCurrentFormTemplate (pointForm) {
   const offersArr = pointForm.offers ? pointForm.offers : [];
   const photosArr = pointForm.photos ? pointForm.photos : [];
