@@ -1,8 +1,19 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import { createElement } from '../render.js';
 import { createPointsListTemplate } from '../templates/points-list-template.js';
 
-export default class PointsListView extends AbstractView{
-  get template() {
+export default class PointsListView {
+  getTemplate() {
     return createPointsListTemplate();
+  }
+
+  getElement() {
+    if (!this.element) {
+      this.element = createElement(this.getTemplate());
+    }
+    return this.element;
+  }
+
+  removeElement() {
+    this.element = null;
   }
 }
