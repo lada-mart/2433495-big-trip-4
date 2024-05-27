@@ -1,3 +1,4 @@
+
 import {UpdateType} from '../const.js';
 import Observable from '../framework/observable.js';
 
@@ -28,6 +29,20 @@ export default class TownModel extends Observable{
   getTownNameById(id) {
     let temp = '';
     this.#destinations.forEach((town) => {
+
+import {getTownsArr} from '../mock/town.js';
+
+export default class TownModel {
+  #towns = getTownsArr();
+
+  getTowns() {
+    return this.#towns;
+  }
+
+  getTownNameById(id) {
+    let temp = '';
+    this.#towns.forEach((town) => {
+
       if (town.id === id) {
         temp = town.name;
       }
@@ -37,7 +52,11 @@ export default class TownModel extends Observable{
 
   getTownDescByID(id) {
     let temp = '';
+
     this.#destinations.forEach((town) => {
+
+    this.#towns.forEach((town) => {
+
       if (town.id === id) {
         temp = town.description;
       }
@@ -47,7 +66,11 @@ export default class TownModel extends Observable{
 
   getPhotosByID(id) {
     let temp = '';
+
     this.#destinations.forEach((town) => {
+
+    this.#towns.forEach((town) => {
+
       if (town.id === id) {
         temp = town.photos;
       }
@@ -57,7 +80,11 @@ export default class TownModel extends Observable{
 
   getIDByTownName(townName) {
     let temp = '';
+
     this.#destinations.forEach((town) => {
+
+    this.#towns.forEach((town) => {
+
       if (town.name === townName) {
         temp = town.id;
       }
