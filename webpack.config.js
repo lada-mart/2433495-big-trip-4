@@ -1,6 +1,7 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const HTMLPlugin = require('html-webpack-plugin');
+
 module.exports = {
   entry: './src/main.js',
   output: {
@@ -33,10 +34,6 @@ module.exports = {
             presets: ['@babel/preset-env']
           },
         },
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader']
       },
     ],
   },

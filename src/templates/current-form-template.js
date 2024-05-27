@@ -1,14 +1,14 @@
 import {TYPE_POINTS, DESTINATIONS, OFFERS, IMAGES} from '../const.js';
 import { getRandomValue, getFullDate } from '../utils.js';
 
-function createCurrentFormTemplate (pointForm) {
+function createCurrentFormTemplate (point) {
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/${pointForm.type}.png" alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${point.type}.png" alt="Event type icon">
         </label>
 
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
@@ -26,19 +26,19 @@ function createCurrentFormTemplate (pointForm) {
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
-              ${pointForm.type}
+              ${point.type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointForm.destination}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${point.destination}" list="destination-list-1">
             <datalist id="destination-list-1">
               ${DESTINATIONS.map((town) => `<option value="${town}"></option>`).join('')};
               </datalist>
               </div>
               <div class="event__field-group  event__field-group--time">
                 <label class="visually-hidden" for="event-start-time-1">From</label>
-                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFullDate(pointForm.dateFrom)}">
+                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFullDate(point.dateFrom)}">
                 &mdash;
                 <label class="visually-hidden" for="event-end-time-1">To</label>
-                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFullDate(pointForm.dateTo)}">
+                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFullDate(point.dateTo)}">
               </div>
 
               <div class="event__field-group  event__field-group--price">
@@ -49,15 +49,16 @@ function createCurrentFormTemplate (pointForm) {
               <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
             </div>
 
-            <button class="event__reset-btn" type="reset">Delete</button>'
-            </header>
+            <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+            <button class="event__reset-btn" type="reset">Cancel</button>
+          </header>
           <section class="event__details">
             <section class="event__section  event__section--offers">
               <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
               <div class="event__available-offers">
               ${OFFERS.map((offer) => `<div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.toLowerCase()}-1" type="checkbox" name="event-offer-${offer.toLowerCase()}" ${isChecked(pointForm.offers, offer)}>
+              <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.toLowerCase()}-1" type="checkbox" name="event-offer-${offer.toLowerCase()}" ${isChecked(point.offers, offer)}>
               <label class="event__offer-label" for="event-offer-${offer.toLowerCase()}-1">
                 <span class="event__offer-title">${offer}</span>
                 &plus;&euro;&nbsp;
@@ -67,7 +68,7 @@ function createCurrentFormTemplate (pointForm) {
 
             <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${pointForm.description}</p>
+        <p class="event__destination-description">${point.description}</p>
         <div class="event__photos-container">
           <div class="event__photos-tape">
           ${IMAGES.map((img) => `<img class="event__photo" src="${img}.jpg" alt="Event photo">`).join('')};
