@@ -76,16 +76,13 @@ export default class BoardPresenter {
         document.removeEventListener('keydown', escKeyDownBtnHandler);
       }});
     const saveBtn = new SaveFormBtnView();
-
     render(pointComponent, this.#pointsListView.element);
     render(openBtn, pointComponent.element, RenderPosition.BEFOREEND);
     render(saveBtn, deleteBtn, RenderPosition.BEFOREBEGIN);
     render(closeBtn, deleteBtn, RenderPosition.AFTEREND);
-
     function replacePointToForm() {
       replace(pointComponent, formComponent);
     }
-
     function replaceFormToPoint() {
       replace(formComponent, pointComponent);
     }

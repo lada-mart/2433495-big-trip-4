@@ -13,5 +13,4 @@ function getRandomPoint(destinationID, offersID) {
     'type': getRandomArrayElement(TYPE_POINTS)
   });
 }
-
 export {getRandomPoint};
