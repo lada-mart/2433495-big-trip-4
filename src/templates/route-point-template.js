@@ -34,7 +34,6 @@ function createRoutePointTemplate (point) {
             </button>
           </div>`;
 }
-
 function isFavorite(check) {
   return check ? 'event__favorite-btn--active' : '';
 }

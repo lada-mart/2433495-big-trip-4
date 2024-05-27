@@ -9,5 +9,4 @@ function getRandomTown() {
     'description': getRandomArrayElement(DESCRIPTION.split('.')).repeat(getRandomValue(1, 5))
   });
 }
-
 export {getRandomTown};

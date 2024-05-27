@@ -9,5 +9,4 @@ function getRandomOffer() {
     'price': getRandomValue()
   });
 }
-
 export {getRandomOffer};

@@ -5,7 +5,6 @@ const TOWN_COUNTS = 8;
 const OFFERS_COUNT = 5;
 const IMAGE_COUNT = 4;
 const IMAGES = [];
-
 const TYPE_POINTS = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 const DESTINATIONS = ['Amsterdam', 'Chamonix', 'Magnitogorsk', 'Chicago', 'Los Angeles', 'Moskow', 'Saint-Peterburg'];
 const OFFERS = ['Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'];
