@@ -1,19 +1,26 @@
-import { createElement } from '../render.js';
 import { createFilterFormTemplate } from '../templates/filter-form-template.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-export default class FilterFormView {
-  getTemplate() {
-    return createFilterFormTemplate();
+export default class FilterFormView extends AbstractView{
+  #filters = null;
+  #currentFilter = null;
+  #handleFilterTypeChange = null;
+
+  constructor ({filters, currentFilterType, onFilterTypeChange}){
+    super();
+    this.#filters = filters;
+    this.#currentFilter = currentFilterType;
+    this.#handleFilterTypeChange = onFilterTypeChange;
+
+    this.element.addEventListener('change', this.#filterTypeChangeHandler);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
+  #filterTypeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFilterTypeChange(evt.target.value);
+  };
 
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createFilterFormTemplate(this.#filters, this.#currentFilter);
   }
 }
