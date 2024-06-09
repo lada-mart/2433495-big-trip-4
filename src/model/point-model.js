@@ -1,42 +1,26 @@
-
-import {getRandomPoint} from '../mock/point.js';
-import { POINTS_COUNT } from '../const.js';
-
-import {getRandomArrayElement, getDateDiff} from '../utils/utils.js';
-
-
-import {getRandomArrayElement, getDateDiff} from '../utils/utils.js';
-
-import {getRandomArrayElement} from '../utils/utils.js';
-
-
-import TownModel from '../model/town-model.js';
-import OfferModel from '../model/offer-model.js';
 import Observable from '../framework/observable.js';
-import {UpdateType} from '../const.js';
+import {UPDATE_TYPE} from '../const.js';
 import { getDateDiff } from '../utils/utils.js';
-// все ошибки к защите исправлю
-
+import dayjs from 'dayjs';
 
 export default class PointModel extends Observable{
   townModel = null;
-  #offerModel = null;
-  #towns = null;
-  #offers = null;
+  offerModel = null;
   #points = null;
   #pointsApiService = null;
 
-  constructor (pointsApiService) {
+  constructor ({pointsApiService, townModel, offerModel}) {
     super();
-
-
     this.#pointsApiService = pointsApiService;
-    this.#offerModel = new OfferModel(this.#pointsApiService);
-    this.townModel = new TownModel(this.#pointsApiService);
-    this.#offerModel.init();
+    this.offerModel = offerModel;
+    this.townModel = townModel;
+    this.offerModel.init();
     this.townModel.init();
-    this.#towns = this.townModel.towns;
     this.#points = [];
+  }
+
+  get points() {
+    return this.#points;
   }
 
   async init() {
@@ -46,80 +30,68 @@ export default class PointModel extends Observable{
     } catch(err) {
       this.#points = [];
     }
-    this._notify(UpdateType.INIT);
-
-    this.townModel = new TownModel();
-    this.#towns = this.townModel.getTowns();
-    this.#points = Array.from({length: POINTS_COUNT}, () => {
-      const townID = getRandomArrayElement(this.#towns).id;
-      const point = (getRandomPoint(townID));
-      this.#offerModel = new OfferModel(point.type);
-      if (point.offers === 'not assigned') {
-        point.offers = this.#offerModel.getOffers();
-      }
-      else {
-        this.#offerModel.createOffers(point.offers);
-        point.offers = this.#offerModel.getOffers();
-
-export default class PointModel {
-  townModel = null;
-  offerModel = null;
-  towns = null;
-  points = null;
-
-  constructor () {
-    this.townModel = new TownModel();
-    this.towns = this.townModel.getTowns();
-    this.points = Array.from({length: POINTS_COUNT}, () => {
-      const townID = getRandomArrayElement(this.towns).id;
-      const point = (getRandomPoint(townID));
-      this.offerModel = new OfferModel(point.type);
-      if (point.offers === 'not assigned') {
-        point.offers = this.offerModel.getOffers();
-      }
-      else {
-        this.offerModel.createOffers(point.offers);
-        point.offers = this.offerModel.getOffers();
-
-      }
-      point.destination = this.townModel.getTownNameById(townID);
-      point.description = this.townModel.getTownDescByID(townID);
-      point.photos = this.townModel.getPhotosByID(townID);
-
-      point.duration = getDateDiff(point.dateFrom, point.dateTo);
-      return point;
-    });
-
+    this._notify(UPDATE_TYPE.INIT);
   }
 
+  countFilteredPoints() {
+    const filterElementsCounts = {
+      present: 0,
+      past: 0,
+      future: 0
+    };
+    const currentDate = dayjs();
+    this.#points.forEach((point) => {
+      if (point.dateTo < currentDate) {
+        filterElementsCounts.past += 1;
+      } else if (point.dateFrom < currentDate) {
+        filterElementsCounts.present += 1;
+      } else {
+        filterElementsCounts.future += 1;
+      }
+    });
+    return filterElementsCounts;
+  }
 
-  updatePoint(updateType, update) {
+  async updatePoint(updateType, update) {
     const index = this.#points.findIndex((point) => point.id === update.id);
-    if (index === -1) {
+    try {
+      const response = await this.#pointsApiService.updatePoint(update);
+      const updatedPoint = this.#adaptToClient(response);
+      this.#points = [
+        ...this.#points.slice(0, index),
+        updatedPoint,
+        ...this.#points.slice(index + 1)
+      ];
+      this._notify(updateType, updatedPoint);
+    }
+    catch (err) {
       throw new Error('Can\'t update unexisting point');
     }
-    this.#points = [
-      ...this.#points.slice(0, index),
-      update,
-      ...this.#points.slice(index + 1)
-    ];
-    this._notify(updateType, update);
   }
-  addPoint(updateType, update) {
-    this.#points = [update, ...this.#points];
-    this._notify(updateType, update);
+
+  async addPoint(updateType, update) {
+    try {
+      const response = await this.#pointsApiService.addPoint(update);
+      const newPoint = this.#adaptToClient(response);
+      this.#points = [newPoint, ...this.#points];
+      this._notify(updateType, newPoint);
+    } catch (err) {
+      throw new Error('Can\'t add point');
+    }
   }
-  deletePoint(updateType, update) {
+
+  async deletePoint(updateType, update) {
     const index = this.#points.findIndex((point) => point.id === update.id);
-    if (index === -1) {
+    try {
+      await this.#pointsApiService.deletePoint(update);
+      this.#points = [
+        ...this.#points.slice(0, index),
+        ...this.#points.slice(index + 1)
+      ];
+      this._notify(updateType);
+    } catch (err) {
       throw new Error('Can\'t delete unexisting point');
     }
-    this.#points = [
-      ...this.#points.slice(0, index),
-      ...this.#points.slice(index + 1)
-    ];
-
-    this._notify(updateType);
   }
 
   #adaptToClient(point) {
@@ -137,26 +109,5 @@ export default class PointModel {
     delete adaptedPoint['base_price'];
 
     return adaptedPoint;
-  }
-
-
-
-      return point;
-    });
-  }
-
-
-
-    this._notify(updateType);
-  }
-
-
-
-  get points() {
-    return this.#points;
-
-  getPoint() {
-    return this.points[0];
-
   }
 }

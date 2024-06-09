@@ -1,5 +1,4 @@
-
-import {UpdateType} from '../const.js';
+import {UPDATE_TYPE} from '../const.js';
 import Observable from '../framework/observable.js';
 
 export default class TownModel extends Observable{
@@ -12,37 +11,23 @@ export default class TownModel extends Observable{
     this.#pointsApiService = pointsApiService;
   }
 
-  init() {
+  get towns() {
+    return this.#destinations;
+  }
+
+  async init() {
     try {
-      const destinations = this.#pointsApiService.destinations;
+      const destinations = await this.#pointsApiService.destinations;
       this.#destinations = destinations;
     } catch(err) {
       this.#destinations = [];
     }
-    this._notify(UpdateType.INIT);
-  }
-
-  get towns() {
-    return this.#destinations;
+    this._notify(UPDATE_TYPE.INIT);
   }
 
   getTownNameById(id) {
     let temp = '';
     this.#destinations.forEach((town) => {
-
-import {getTownsArr} from '../mock/town.js';
-
-export default class TownModel {
-  #towns = getTownsArr();
-
-  getTowns() {
-    return this.#towns;
-  }
-
-  getTownNameById(id) {
-    let temp = '';
-    this.#towns.forEach((town) => {
-
       if (town.id === id) {
         temp = town.name;
       }
@@ -52,11 +37,7 @@ export default class TownModel {
 
   getTownDescByID(id) {
     let temp = '';
-
     this.#destinations.forEach((town) => {
-
-    this.#towns.forEach((town) => {
-
       if (town.id === id) {
         temp = town.description;
       }
@@ -66,13 +47,9 @@ export default class TownModel {
 
   getPhotosByID(id) {
     let temp = '';
-
     this.#destinations.forEach((town) => {
-
-    this.#towns.forEach((town) => {
-
       if (town.id === id) {
-        temp = town.photos;
+        temp = town.pictures;
       }
     });
     return temp;
@@ -80,11 +57,7 @@ export default class TownModel {
 
   getIDByTownName(townName) {
     let temp = '';
-
     this.#destinations.forEach((town) => {
-
-    this.#towns.forEach((town) => {
-
       if (town.name === townName) {
         temp = town.id;
       }

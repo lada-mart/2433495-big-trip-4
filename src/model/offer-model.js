@@ -1,5 +1,4 @@
-
-import { UpdateType } from '../const.js';
+import { UPDATE_TYPE } from '../const.js';
 import Observable from '../framework/observable.js';
 
 export default class OfferModel extends Observable{
@@ -12,64 +11,32 @@ export default class OfferModel extends Observable{
     this.#pointsApiService = pointsApiService;
   }
 
-  init() {
+  get offers() {
+    return this.#offers;
+  }
+
+  async init() {
     try {
-      const offers = this.#pointsApiService.offers;
+      const offers = await this.#pointsApiService.offers;
       this.#offers = offers;
     } catch(err) {
       this.#offers = [];
     }
-    this._notify(UpdateType.INIT);
-
-import { OFFERS } from '../const.js';
-import { getRandomArrayElement, getRandomValue } from '../utils/utils.js';
-
-export default class OfferModel {
-  offers = [];
-  constructor(type) {
-    this.createOffers(type);
-
+    this._notify(UPDATE_TYPE.INIT);
   }
 
-  getOffers() {
-    return this.offers;
-  }
-  getOfferByID(offersArr, id) {
+  getOfferByType(offersArr, type) {
     let temp = '';
     offersArr.forEach((offer) => {
-      if (offer.id === id) {
+      if (offer.type === type) {
         temp = offer;
       }
     });
     return temp;
   }
+
   getOffersIDs(offersArr) {
     this.offersIds = offersArr.map((offer) => offer.id);
     return this.offersIds;
   }
-  updateOffers(newType) {
-
-    this.offers = [];
-
-    this.createOffers(newType);
-    return this.offers;
-  }
-
-
-  createOffers(type) {
-
-    if (OFFERS[type]) {
-
-    if (OFFERS[type] !== undefined) {
-
-      OFFERS[type].forEach((offerName) => {
-        this.offers.push({
-          title: offerName,
-          price: getRandomValue(),
-          isChecked: getRandomArrayElement([0, 1])
-        });
-      });
-    }
-  }
-
 }
